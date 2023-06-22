@@ -11,16 +11,17 @@ class Card(db.Model):
     status = db.Column(db.String)
     priority = db.Column(db.String)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    user = db.relationship("User", back_populates="cards")
+    user = db.relationship('User', back_populates='cards')
 
 class CardSchema(ma.Schema):
-    user = fields.Nested("UserSchema", only=["name", "email"]) # nested defines the relationship
+    user = fields.Nested('UserSchema', only=['name', 'email'])
 
-    class Meta: # where we define the sfields of the Meta
-        fields = ("id", "title", "description", "date", "status", "priority", "user")
-        ordered = True # whatever we return in this field this will respect the order above, instead of dumping in abc order
+    class Meta:
+        fields = ('id', 'title', 'description', 'date', 'status', 'priority', 'user')
+        ordered = True
 
-cards_schema = CardSchema() # creatig our card schema
+card_schema = CardSchema()
 cards_schema = CardSchema(many=True)
+
