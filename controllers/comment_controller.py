@@ -6,8 +6,6 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 comments_bp = Blueprint('comments', __name__)
 
-# /cards/comments
-
 # /cards/card_id/comments - POST
 
 @comments_bp.route('/', methods=['POST'])

@@ -3,10 +3,10 @@ from init import db
 from models.card import Card, cards_schema, card_schema
 from datetime import date
 from flask_jwt_extended import get_jwt_identity, jwt_required
-from .comment_controller import comments_bp
+from controllers.comment_controller import comments_bp
 
 cards_bp = Blueprint('cards', __name__, url_prefix='/cards')
-cards_bp.register_blueprint(comments_bp, url_prefix="/<int:card_id>/comments")
+cards_bp.register_blueprint(comments_bp, url_prefix='/<int:card_id>/comments')
 
 @cards_bp.route('/')
 def get_all_cards():
@@ -26,7 +26,7 @@ def get_one_card(id):
 @cards_bp.route('/', methods=['POST'])
 @jwt_required()
 def create_card():
-    body_data = request.get_json()
+    body_data = card_schema.load(request.get_json())
     # create a new Card model instance
     card = Card(
         title=body_data.get('title'),
@@ -58,7 +58,7 @@ def delete_one_card(id):
 @cards_bp.route('/<int:id>', methods=['PUT', 'PATCH'])
 @jwt_required()
 def update_one_card(id):
-    body_data = request.get_json()
+    body_data = card_schema.load(request.get_json(), partial=True)
     stmt = db.select(Card).filter_by(id=id)
     card = db.session.scalar(stmt)
     if card:
